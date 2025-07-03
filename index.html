@@ -511,7 +511,8 @@
 
         // --- WebSocket Logic ---
         const clientId = Date.now();
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${clientId}`);
+        const backendUrl = 'ai-tools-servers.onrender.com';
+        const wsUrl = `wss://${backendUrl}/ws/${clientId}`;
 
 
         ws.onopen = () => {
