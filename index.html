@@ -513,7 +513,7 @@
         const clientId = Date.now();
         const backendUrl = 'ai-tools-servers.onrender.com';
         const wsUrl = `wss://${backendUrl}/ws/${clientId}`;
-
+         const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
             console.log('Connected to FastAPI WebSocket server');
