@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vishesh Personal AI Agent ✨</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,7 +33,7 @@
             background: linear-gradient(-45deg, var(--bg-gradient-start), var(--bg-gradient-end), #a8e0ff, #fbc2eb);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            overflow: hidden; /* Prevent body scrollbars */
+            overflow: hidden;
         }
 
         @keyframes gradientBG {
@@ -41,385 +42,94 @@
             100% { background-position: 0% 50%; }
         }
         
-        /* --- NEW LAYOUT STYLES --- */
-        .main-layout {
-            display: flex;
-            height: 100vh;
-            width: 100%;
-        }
-
-        /* --- NEW SIDEBAR STYLES --- */
-        .sidebar {
-            width: 340px;
-            flex-shrink: 0;
-            background-color: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(5px);
-            border-right: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .sidebar h2 {
-            font-size: 22px;
-            margin: 0 0 20px 0;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .menu-cards {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-right: -16px;
-            padding-right: 16px;
-        }
-
-        .menu-card {
-            background-color: var(--bot-message-bg);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        .menu-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu-card .icon {
-            width: 32px;
-            height: 32px;
-            flex-shrink: 0;
-            color: var(--primary-color);
-        }
-
-        .menu-card h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin: 0 0 4px 0;
-            color: var(--text-color);
-        }
-
-        .menu-card p {
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--light-text-color);
-            margin: 0;
-        }
-
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100%;
-            /* REMOVED: max-width: 800px; */
-            /* REMOVED: margin: 0 auto; */
-            background-color: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(2px);
-            /* REMOVED: border-left/right, shadow is now on main layout */
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-            flex-grow: 1;
-        }
-
-        /* Top Navigation */
-        .top-nav {
-            padding: 12px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-        }
-
-        .top-nav .logo {
-            font-weight: 700;
-            font-size: 20px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Chat Window */
-        .chat-window {
-            padding: 0 24px;
-            overflow-y: auto;
-            flex-grow: 1;
-            position: relative;
-        }
-
-        /* Custom Scrollbar */
-        .chat-window::-webkit-scrollbar, .menu-cards::-webkit-scrollbar {
-            width: 6px;
-        }
-        .chat-window::-webkit-scrollbar-track, .menu-cards::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .chat-window::-webkit-scrollbar-thumb, .menu-cards::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
-        }
-        .chat-window::-webkit-scrollbar-thumb:hover, .menu-cards::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        /* Intro Screen */
-        .chat-intro {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 100%;
-            color: var(--light-text-color);
-        }
-
-        .chat-intro img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: white;
-            padding: 5px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-        }
-
-        .chat-intro h1 {
-            font-size: 28px;
-            margin: 0 0 10px 0;
-            color: var(--text-color);
-        }
-
-        .chat-intro p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        /* Messages */
-        @keyframes message-in {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .main-layout { display: flex; height: 100vh; width: 100%; }
+        .sidebar { width: 340px; flex-shrink: 0; background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 24px; display: flex; flex-direction: column; overflow: hidden; transition: transform 0.3s ease-in-out; }
+        .sidebar h2 { font-size: 22px; margin: 0 0 20px 0; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .menu-cards { flex-grow: 1; overflow-y: auto; margin-right: -16px; padding-right: 16px; }
+        .menu-card { background-color: var(--bot-message-bg); border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.2s ease, box-shadow 0.3s ease; display: flex; align-items: flex-start; gap: 12px; }
+        .menu-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); }
+        .menu-card .icon { width: 32px; height: 32px; flex-shrink: 0; color: var(--primary-color); }
+        .menu-card h3 { font-size: 15px; font-weight: 600; margin: 0 0 4px 0; color: var(--text-color); }
+        .menu-card p { font-size: 13px; line-height: 1.5; color: var(--light-text-color); margin: 0; }
+        .chat-container { display: flex; flex-direction: column; height: 100vh; width: 100%; background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(2px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1); flex-grow: 1; }
+        .top-nav { padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+        .top-nav .logo { font-weight: 700; font-size: 20px; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .chat-window { padding: 0 24px; overflow-y: auto; flex-grow: 1; position: relative; }
+        .chat-window::-webkit-scrollbar, .menu-cards::-webkit-scrollbar { width: 6px; }
+        .chat-window::-webkit-scrollbar-track, .menu-cards::-webkit-scrollbar-track { background: transparent; }
+        .chat-window::-webkit-scrollbar-thumb, .menu-cards::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 3px; }
+        .chat-window::-webkit-scrollbar-thumb:hover, .menu-cards::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
+        .chat-intro { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; color: var(--light-text-color); }
+        .chat-intro img { width: 80px; height: 80px; border-radius: 50%; background-color: white; padding: 5px; box-shadow: var(--shadow); margin-bottom: 20px; }
+        .chat-intro h1 { font-size: 28px; margin: 0 0 10px 0; color: var(--text-color); }
+        .chat-intro p { font-size: 16px; margin-bottom: 20px; }
+        @keyframes message-in { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .message-wrapper { display: flex; margin-bottom: 20px; animation: message-in 0.4s ease-out; }
+        .message { padding: 12px 18px; border-radius: 20px; max-width: 80%; word-wrap: break-word; white-space: pre-wrap; line-height: 1.5; box-shadow: var(--shadow); }
+        .message p { margin: 0; } .message ul, .message ol { padding-left: 20px; } .message pre { background-color: #f4f4f4; padding: 10px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; } .message code { font-family: 'Courier New', Courier, monospace; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; margin-right: 12px; align-self: flex-end; flex-shrink: 0; }
+        .bot-message-wrapper { justify-content: flex-start; } .bot-message { background-color: var(--bot-message-bg); border-top-left-radius: 4px; }
+        .user-message-wrapper { justify-content: flex-end; } .user-message { background-color: var(--user-message-bg); border-top-right-radius: 4px; color: #2c3e50; } .user-message-wrapper .avatar { margin-left: 12px; margin-right: 0; }
+        .typing-indicator span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #aaa; margin: 0 2px; animation: typing-bounce 1.2s infinite ease-in-out; } .typing-indicator span:nth-child(1) { animation-delay: -0.32s; } .typing-indicator span:nth-child(2) { animation-delay: -0.16s; } @keyframes typing-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+        .input-area-wrapper { padding: 16px 24px; flex-shrink: 0; }
+        .input-area { display: flex; align-items: center; padding: 8px; border-radius: 28px; background: var(--input-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); transition: box-shadow 0.3s ease; }
+        .input-area:focus-within { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        #user-input { flex-grow: 1; border: none; outline: none; background-color: transparent; font-size: 16px; color: var(--text-color); padding: 8px; resize: none; max-height: 150px; }
+        #user-input::placeholder { color: var(--light-text-color); }
+        .send-button { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); border: none; width: 40px; height: 40px; border-radius: 50%; margin-left: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s ease, box-shadow 0.3s ease; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
+        .send-button:hover { transform: scale(1.1); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); }
+        .send-button:active { transform: scale(1.05); }
+        .send-button svg { color: white; width: 20px; height: 20px; }
+        #spinner { display: none; width: 24px; height: 24px; border: 3px solid rgba(0,0,0,0.2); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 16px 0 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
-        .message-wrapper {
-            display: flex;
-            margin-bottom: 20px;
-            animation: message-in 0.4s ease-out;
-        }
-        
-        .message {
-            padding: 12px 18px;
-            border-radius: 20px;
-            max-width: 80%;
-            word-wrap: break-word;
-            white-space: pre-wrap;
-            line-height: 1.5;
-            box-shadow: var(--shadow);
-        }
+        .menu-toggle-button { display: none; background: transparent; border: none; cursor: pointer; padding: 0; margin-right: 16px; color: var(--primary-color); }
+        .close-sidebar-button { display: none; position: absolute; top: 10px; right: 15px; background: transparent; border: none; font-size: 28px; line-height: 1; cursor: pointer; color: var(--light-text-color); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
+        .overlay.active { opacity: 1; pointer-events: auto; }
 
-        .message p { margin: 0; }
-        .message ul, .message ol { padding-left: 20px; }
-        .message pre { 
-            background-color: #f4f4f4; 
-            padding: 10px; 
-            border-radius: 8px; 
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        .message code {
-             font-family: 'Courier New', Courier, monospace;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 12px;
-            align-self: flex-end;
-            flex-shrink: 0;
-        }
-
-        .bot-message-wrapper {
-            justify-content: flex-start;
-        }
-        .bot-message {
-            background-color: var(--bot-message-bg);
-            border-top-left-radius: 4px;
-        }
-
-        .user-message-wrapper {
-            justify-content: flex-end;
-        }
-        .user-message {
-            background-color: var(--user-message-bg);
-            border-top-right-radius: 4px;
-            color: #2c3e50;
-        }
-        .user-message-wrapper .avatar {
-            margin-left: 12px;
-            margin-right: 0;
-        }
-
-
-        /* Typing Indicator */
-        .typing-indicator span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #aaa;
-            margin: 0 2px;
-            animation: typing-bounce 1.2s infinite ease-in-out;
-        }
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-        
-        @keyframes typing-bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1.0); }
-        }
-
-
-        /* Input Area */
-        .input-area-wrapper {
-            padding: 16px 24px;
-            flex-shrink: 0;
-        }
-
-        .input-area {
-            display: flex;
-            align-items: center;
-            padding: 8px;
-            border-radius: 28px;
-            background: var(--input-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .input-area:focus-within {
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #user-input {
-            flex-grow: 1;
-            border: none;
-            outline: none;
-            background-color: transparent;
-            font-size: 16px;
-            color: var(--text-color);
-            padding: 8px;
-            resize: none;
-            max-height: 150px;
-        }
-        #user-input::placeholder {
-            color: var(--light-text-color);
-        }
-
-        .send-button {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-left: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .send-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-        }
-        .send-button:active {
-            transform: scale(1.05);
-        }
-        
-        .send-button svg {
-            color: white;
-            width: 20px;
-            height: 20px;
-        }
-        #spinner {
-            display: none;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(0,0,0,0.2);
-            border-top-color: var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 16px 0 12px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* --- RESPONSIVE STYLES --- */
         @media (max-width: 1100px) {
-            .sidebar {
-                display: none;
-            }
+            .top-nav { justify-content: flex-start; }
+            .top-nav .logo { flex-grow: 1; text-align: center; }
+            .menu-toggle-button { display: flex; align-items: center; justify-content: center; }
+            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000; transform: translateX(-100%); background-color: #f7faff; border-right: 1px solid var(--border-color); }
+            .sidebar.open { transform: translateX(0); }
+            .close-sidebar-button { display: block; }
         }
-
     </style>
 </head>
 <body>
     <div class="main-layout">
-        <!-- Sidebar with Menu Cards -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
+            <button class="close-sidebar-button" id="close-sidebar-button">×</button>
             <h2>Vishesh AI Agents</h2>
-            <div class="menu-cards" id="menu-cards-container">
-                <!-- Cards will be dynamically inserted here by JS -->
-            </div>
+            <div class="menu-cards" id="menu-cards-container"></div>
         </div>
-
-        <!-- Chat Container -->
         <div class="chat-container">
-            <!-- Top Navigation -->
             <div class="top-nav">
+                <button class="menu-toggle-button" id="menu-toggle-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
                 <div class="logo">Vishesh AI</div>
             </div>
-
             <div class="chat-window" id="chat-window">
-                <!-- Chat messages will be appended here -->
-                
-                <!-- Initial "Welcome" Screen -->
                 <div class="chat-intro" id="chat-intro">
                     <img src="https://api.iconify.design/ph:robot-bold.svg?color=%236a11cb" alt="AI Avatar">
                     <h1>Vishesh Personal AI Agent</h1>
                     <p>Select an agent from the sidebar or ask me anything to get started.</p>
                 </div>
             </div>
-
             <div class="input-area-wrapper">
                 <div class="input-area">
                     <textarea id="user-input" placeholder="Ask anything..." rows="1"></textarea>
                     <div id="spinner"></div>
                     <button class="send-button" id="send-button" aria-label="Send message">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"></path></svg>
                     </button>
                 </div>
             </div>
         </div>
+        <div class="overlay" id="overlay"></div>
     </div>
 
     <script>
@@ -430,68 +140,26 @@
         const chatIntro = document.getElementById('chat-intro');
         const menuCardsContainer = document.getElementById('menu-cards-container');
 
-        // --- Data for Menu Cards ---
         const agentItems = [
-            { 
-                title: "AI-Powered Freelance Marketplace",
-                description: "Connects freelancers with AI agents to automate tasks like project proposals, contract creation, and communication.",
-                icon: "ph:briefcase-duotone"
-            },
-            {
-                title: "AI Video Sales Letter Creator",
-                description: "Generates compelling video sales letters from business input, optimizing sales strategies.",
-                icon: "ph:video-camera-duotone"
-            },
-            {
-                title: "AI Customer Support Automation",
-                description: "Implements AI chatbots to handle routine inquiries, freeing up human support for complex issues.",
-                icon: "ph:chats-circle-duotone"
-            },
-            {
-                title: "AI-Generated Virtual Employees",
-                description: "AI agents perform administrative tasks like scheduling, email management, or customer service.",
-                icon: "ph:users-three-duotone"
-            },
-            {
-                title: "AI Meeting Summarizer Agent",
-                description: "Automatically summarizes meeting content, capturing key points and action items.",
-                icon: "ph:file-text-duotone"
-            },
-            {
-                title: "AI CRM Follow-Up Agent",
-                description: "Automates follow-up emails and tasks based on CRM data, improving engagement.",
-                icon: "ph:chart-line-up-duotone"
-            },
-            {
-                title: "AI Financial Forecasting Assistant",
-                description: "Analyzes financial data and predicts future trends to inform business decisions.",
-                icon: "ph:bank-duotone"
-            },
-            {
-                title: "AI Inbox Zero Agent",
-                description: "Sorts and manages emails, filtering out irrelevant messages and prioritizing important ones.",
-                icon: "ph:envelope-simple-open-duotone"
-            },
-            {
-                title: "AI Client Onboarding Bot",
-                description: "Guides new clients through onboarding, automating tasks and providing personalized support.",
-                icon: "ph:user-plus-duotone"
-            }
+            { title: "AI-Powered Freelance Marketplace", description: "Connects freelancers with AI agents to automate tasks like project proposals, contract creation, and communication.", icon: "ph:briefcase-duotone" },
+            { title: "AI Video Sales Letter Creator", description: "Generates compelling video sales letters from business input, optimizing sales strategies.", icon: "ph:video-camera-duotone" },
+            { title: "AI Customer Support Automation", description: "Implements AI chatbots to handle routine inquiries, freeing up human support for complex issues.", icon: "ph:chats-circle-duotone" },
+            { title: "AI-Generated Virtual Employees", description: "AI agents perform administrative tasks like scheduling, email management, or customer service.", icon: "ph:users-three-duotone" },
+            { title: "AI Meeting Summarizer Agent", description: "Automatically summarizes meeting content, capturing key points and action items.", icon: "ph:file-text-duotone" },
+            { title: "AI CRM Follow-Up Agent", description: "Automates follow-up emails and tasks based on CRM data, improving engagement.", icon: "ph:chart-line-up-duotone" },
+            { title: "AI Financial Forecasting Assistant", description: "Analyzes financial data and predicts future trends to inform business decisions.", icon: "ph:bank-duotone" },
+            { title: "AI Inbox Zero Agent", description: "Sorts and manages emails, filtering out irrelevant messages and prioritizing important ones.", icon: "ph:envelope-simple-open-duotone" },
+            { title: "AI Client Onboarding Bot", description: "Guides new clients through onboarding, automating tasks and providing personalized support.", icon: "ph:user-plus-duotone" }
         ];
 
-        // --- Populate Menu Cards ---
         function populateMenuCards() {
             agentItems.forEach(item => {
                 const card = document.createElement('div');
                 card.classList.add('menu-card');
                 card.innerHTML = `
                     <img src="https://api.iconify.design/${item.icon}.svg?color=%236a11cb" class="icon" alt="${item.title} icon">
-                    <div>
-                        <h3>${item.title}</h3>
-                        <p>${item.description}</p>
-                    </div>
+                    <div><h3>${item.title}</h3><p>${item.description}</p></div>
                 `;
-                // Add click listener to each card
                 card.addEventListener('click', () => {
                     const question = `Tell me more about the "${item.title}".`;
                     userInput.value = question;
@@ -502,148 +170,197 @@
         }
         populateMenuCards();
 
-
-        // --- Auto-resize textarea ---
         userInput.addEventListener("input", () => {
             userInput.style.height = "auto";
             userInput.style.height = (userInput.scrollHeight) + "px";
         });
+        
+        const sidebar = document.getElementById('sidebar');
+        const menuToggleButton = document.getElementById('menu-toggle-button');
+        const closeSidebarButton = document.getElementById('close-sidebar-button');
+        const overlay = document.getElementById('overlay');
 
-        // --- WebSocket Logic ---
+        function toggleMenu() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        menuToggleButton.addEventListener('click', toggleMenu);
+        closeSidebarButton.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        function addMenuCloseListenerToCards() {
+            const cards = document.querySelectorAll('.menu-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    if (sidebar.classList.contains('open')) {
+                        toggleMenu();
+                    }
+                });
+            });
+        }
+        addMenuCloseListenerToCards();
+
         const clientId = Date.now();
-        const backendUrl = 'ai-tools-servers.onrender.com';
-        const wsUrl = `wss://${backendUrl}/ws/${clientId}`;
-         const ws = new WebSocket(wsUrl);
+        const localBackendUrl = '127.0.0.1:8000'; 
+        const wsUrl = `ws://${localBackendUrl}/ws/${clientId}`;
+        const ws = new WebSocket(wsUrl);
 
-        ws.onopen = () => {
-            console.log('Connected to FastAPI WebSocket server');
-            // No need to display a connection message here, the server sends one.
-        };
-
-        ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-            displayMessage("Connection error. Is the backend server running?", 'bot');
-        };
-
-        ws.onclose = () => {
-            console.log('Disconnected from WebSocket server');
-            displayMessage("Connection to server lost. Please refresh.", 'bot');
-            hideLoading();
-        };
-
+        ws.onopen = () => { console.log('Connected to local FastAPI WebSocket server'); };
+        ws.onerror = (error) => { console.error('WebSocket error:', error); displayMessage("Connection error. Is your local backend running?", 'bot'); };
+        ws.onclose = () => { console.log('Disconnected from WebSocket server'); displayMessage("Connection to server lost. Please refresh.", 'bot'); hideLoading(); };
         ws.onmessage = (event) => {
-            hideLoading(); // Hide loading indicator when a message arrives
+            hideLoading();
             const data = JSON.parse(event.data);
-            
-            if (data.type === 'response' || data.type === 'message') {
-                displayMessage(data.data, 'bot');
-            } else if (data.type === 'error') {
-                displayMessage("An error occurred: " + data.data, 'bot');
-            }
+            if (data.type === 'response' || data.type === 'message') { displayMessage(data.data, 'bot'); } 
+            else if (data.type === 'error') { displayMessage("An error occurred: " + data.data, 'bot'); }
         };
 
-        // --- Event Listeners ---
         sendButton.addEventListener('click', sendMessage);
-        userInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault(); // Prevent new line on Enter
-                sendMessage();
-            }
-        });
+        userInput.addEventListener('keydown', (event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); } });
 
         function sendMessage() {
             const messageText = userInput.value.trim();
             if (!messageText) return;
-
-            if (chatIntro) {
-                chatIntro.style.display = 'none';
-            }
-
+            if (chatIntro) { chatIntro.style.display = 'none'; }
             displayMessage(messageText, 'user');
             userInput.value = '';
             userInput.style.height = "auto";
-
             showLoading();
-
-            if (ws.readyState === WebSocket.OPEN) {
-                ws.send(messageText);
-            } else {
-                hideLoading();
-                displayMessage("WebSocket is not connected.", 'bot');
-            }
-            
+            if (ws.readyState === WebSocket.OPEN) { ws.send(messageText); } 
+            else { hideLoading(); displayMessage("WebSocket is not connected.", 'bot'); }
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
         
         let thinkingMessageElement = null;
 
-        function displayMessage(message, sender) {
-            if (thinkingMessageElement) {
-                thinkingMessageElement.remove();
-                thinkingMessageElement = null;
+   // In index.html, inside the <script> tag
+
+function displayMessage(message, sender) {
+    if (thinkingMessageElement) {
+        thinkingMessageElement.remove();
+        thinkingMessageElement = null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('message-wrapper', sender === 'user' ? 'user-message-wrapper' : 'bot-message-wrapper');
+
+    const avatar = document.createElement('img');
+    avatar.classList.add('avatar');
+    avatar.src = sender === 'user' 
+        ? 'https://api.iconify.design/ph:user-bold.svg?color=%234f4f4f'
+        : 'https://api.iconify.design/ph:robot-duotone.svg?color=%236a11cb';
+
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+
+    let isChart = false;
+    if (sender === 'bot') {
+        try {
+            const jsonStringMatch = message.match(/{[\s\S]*}/);
+            if (jsonStringMatch) {
+                const correctedJsonString = jsonStringMatch[0].replace(/'/g, '"').replace(/None/g, 'null');
+                const data = JSON.parse(correctedJsonString);
+                
+                // NEW CHECK for historical_data and forecast_data
+                if (data && data.labels && data.historical_data && data.forecast_data) {
+                    isChart = true;
+
+                    const chartTitle = document.createElement('h4');
+                    chartTitle.textContent = `Sales Forecast for: ${data.product_category}`;
+                    chartTitle.style.margin = '0 0 10px 0';
+                    const canvas = document.createElement('canvas');
+                    messageElement.appendChild(chartTitle);
+                    messageElement.appendChild(canvas);
+
+                    // Render the NEW chart with two datasets
+                    new Chart(canvas, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [
+                                {
+                                    label: 'Historical Sales',
+                                    data: data.historical_data,
+                                    borderColor: 'rgb(54, 162, 235)',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    fill: false,
+                                    tension: 0.1
+                                },
+                                {
+                                    label: 'Forecasted Sales',
+                                    data: data.forecast_data,
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderDash: [5, 5], // Dashed line for forecast
+                                    fill: false,
+                                    tension: 0.1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false, // Don't force y-axis to start at 0
+                                    ticks: {
+                                        callback: function(value, index, values) {
+                                            return '$' + new Intl.NumberFormat().format(value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             }
-
-            const wrapper = document.createElement('div');
-            wrapper.classList.add('message-wrapper', sender === 'user' ? 'user-message-wrapper' : 'bot-message-wrapper');
-
-            const avatar = document.createElement('img');
-            avatar.classList.add('avatar');
-            avatar.src = sender === 'user' 
-                ? 'https://api.iconify.design/ph:user-bold.svg?color=%234f4f4f'
-                : 'https://api.iconify.design/ph:robot-duotone.svg?color=%236a11cb';
-            
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-
-            // Use marked.parse for all messages to render markdown correctly
-            messageElement.innerHTML = marked.parse(message, { breaks: true, gfm: true });
-            
-            if(sender === 'user'){
-                wrapper.appendChild(messageElement);
-                wrapper.appendChild(avatar);
-            } else {
-                wrapper.appendChild(avatar);
-                wrapper.appendChild(messageElement);
-            }
-            
-            chatWindow.appendChild(wrapper);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
+        } catch (e) {
+            console.log("Could not parse message as chart data.", e);
         }
+    }
 
+    if (!isChart) {
+        messageElement.innerHTML = marked.parse(message, { breaks: true, gfm: true });
+    }
+
+    if (sender === 'user') {
+        wrapper.appendChild(messageElement);
+        wrapper.appendChild(avatar);
+    } else {
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(messageElement);
+    }
+    chatWindow.appendChild(wrapper);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
         function showLoading() {
-            if (chatIntro) {
-                chatIntro.style.display = 'none';
-            }
-
+            if (chatIntro) { chatIntro.style.display = 'none'; }
             thinkingMessageElement = document.createElement('div');
             thinkingMessageElement.classList.add('message-wrapper', 'bot-message-wrapper');
-            thinkingMessageElement.innerHTML = `
-                <img class="avatar" src="https://api.iconify.design/ph:robot-duotone.svg?color=%236a11cb" alt="AI Avatar">
-                <div class="message bot-message">
-                    <div class="typing-indicator">
-                        <span></span><span></span><span></span>
-                    </div>
-                </div>
-            `;
+            thinkingMessageElement.innerHTML = `<img class="avatar" src="https://api.iconify.design/ph:robot-duotone.svg?color=%236a11cb" alt="AI Avatar"><div class="message bot-message"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
             chatWindow.appendChild(thinkingMessageElement);
             chatWindow.scrollTop = chatWindow.scrollHeight;
-
             sendButton.style.display = 'none';
             spinner.style.display = 'block';
             userInput.disabled = true;
         }
 
         function hideLoading() {
-             if (thinkingMessageElement) {
-                thinkingMessageElement.remove();
-                thinkingMessageElement = null;
-            }
+             if (thinkingMessageElement) { thinkingMessageElement.remove(); thinkingMessageElement = null; }
             sendButton.style.display = 'flex';
             spinner.style.display = 'none';
             userInput.disabled = false;
             userInput.focus();
         }
-
     </script>
 </body>
 </html>
