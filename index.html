@@ -11,17 +11,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient-start: #e0c3fc;
-            --bg-gradient-end: #8ec5fc;
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --text-color: #333;
-            --light-text-color: #555;
-            --border-color: rgba(0, 0, 0, 0.08);
-            --bot-message-bg: #ffffff;
-            --user-message-bg: #f0f4ff;
-            --input-bg: rgba(255, 255, 255, 0.3);
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            --primary-color: #6D28D9; /* Deep Violet */
+            --secondary-color: #4F46E5; /* Indigo */
+            --accent-color: #EC4899; /* Pink */
+            
+            --bg-color: #F8F9FE;
+            --sidebar-bg: #FFFFFF;
+            --chat-bg: rgba(255, 255, 255, 0.6);
+            --card-bg: #FFFFFF;
+            --card-hover-bg: #F9FAFB;
+            
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --text-on-primary: #FFFFFF;
+
+            --border-color-light: #E5E7EB;
+            --border-color-strong: #D1D5DB;
+
+            --bot-message-bg: #FFFFFF;
+            --user-message-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         body {
@@ -29,71 +41,209 @@
             margin: 0;
             padding: 0;
             font-size: 16px;
-            color: var(--text-color);
-            background: linear-gradient(-45deg, var(--bg-gradient-start), var(--bg-gradient-end), #a8e0ff, #fbc2eb);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            color: var(--text-dark);
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, #e0c3fc20, transparent 40%),
+                radial-gradient(circle at 85% 30%, #8ec5fc20, transparent 40%);
             overflow: hidden;
         }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
         
+        /* --- Layout --- */
         .main-layout { display: flex; height: 100vh; width: 100%; }
-        .sidebar { width: 340px; flex-shrink: 0; background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 24px; display: flex; flex-direction: column; overflow: hidden; transition: transform 0.3s ease-in-out; }
-        .sidebar h2 { font-size: 22px; margin: 0 0 20px 0; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .menu-cards { flex-grow: 1; overflow-y: auto; margin-right: -16px; padding-right: 16px; }
-        .menu-card { background-color: var(--bot-message-bg); border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.2s ease, box-shadow 0.3s ease; display: flex; align-items: flex-start; gap: 12px; }
-        .menu-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); }
-        .menu-card .icon { width: 32px; height: 32px; flex-shrink: 0; color: var(--primary-color); }
-        .menu-card h3 { font-size: 15px; font-weight: 600; margin: 0 0 4px 0; color: var(--text-color); }
-        .menu-card p { font-size: 13px; line-height: 1.5; color: var(--light-text-color); margin: 0; }
-        .chat-container { display: flex; flex-direction: column; height: 100vh; width: 100%; background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(2px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1); flex-grow: 1; }
-        .top-nav { padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
-        .top-nav .logo { font-weight: 700; font-size: 20px; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .chat-window { padding: 0 24px; overflow-y: auto; flex-grow: 1; position: relative; }
+        .chat-container { display: flex; flex-direction: column; height: 100vh; width: 100%; background-color: var(--chat-bg); backdrop-filter: blur(20px); flex-grow: 1; }
+        
+        /* --- Sidebar --- */
+        .sidebar { 
+            width: 340px; 
+            flex-shrink: 0; 
+            background-color: var(--sidebar-bg); 
+            border-right: 1px solid var(--border-color-light); 
+            padding: 24px; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            transition: transform 0.3s ease-in-out; 
+            box-shadow: var(--shadow-md);
+        }
+        .sidebar h2 { 
+            font-size: 22px; 
+            margin: 0 0 24px 0; 
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .menu-cards { 
+            flex-grow: 1; 
+            overflow-y: auto; 
+            margin: 0 -8px; 
+            padding: 0 8px;
+        }
+
+        /* --- THE CARD STYLING (EQUAL SIZE) --- */
+        .menu-card { 
+            background-color: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 16px; 
+            margin-bottom: 12px; 
+            box-shadow: var(--shadow-sm); 
+            cursor: pointer; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 16px; 
+            border: 1px solid var(--border-color-light);
+            height: 115px; /* <-- KEY: Fixed height for all cards */
+            box-sizing: border-box;
+        }
+        .menu-card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: var(--shadow-md);
+            background-color: var(--card-hover-bg);
+        }
+        .menu-card .icon { 
+            width: 36px; 
+            height: 36px; 
+            flex-shrink: 0; 
+            color: var(--primary-color);
+            margin-top: 4px; /* Align icon better with text */
+        }
+        /* Flexbox container for text to control vertical layout */
+        .menu-card .text-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertically center the text */
+            height: 100%; /* Take full height of the flex space */
+        }
+        .menu-card h3 { 
+            font-size: 15px; 
+            font-weight: 600; 
+            margin: 0 0 4px 0; 
+            color: var(--text-dark); 
+        }
+        .menu-card p { 
+            font-size: 13px; 
+            line-height: 1.5; 
+            color: var(--text-light); 
+            margin: 0; 
+        }
+
+        /* --- Chat Area --- */
+        .top-nav { 
+            padding: 12px 24px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid var(--border-color-light); 
+            flex-shrink: 0; 
+        }
+        .top-nav .logo { 
+            font-weight: 700; 
+            font-size: 20px; 
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .chat-window { padding: 24px; overflow-y: auto; flex-grow: 1; position: relative; }
         .chat-window::-webkit-scrollbar, .menu-cards::-webkit-scrollbar { width: 6px; }
+        .menu-cards::-webkit-scrollbar { margin-right: -16px; padding-right: 16px; }
         .chat-window::-webkit-scrollbar-track, .menu-cards::-webkit-scrollbar-track { background: transparent; }
-        .chat-window::-webkit-scrollbar-thumb, .menu-cards::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 3px; }
-        .chat-window::-webkit-scrollbar-thumb:hover, .menu-cards::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
-        .chat-intro { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; color: var(--light-text-color); }
-        .chat-intro img { width: 80px; height: 80px; border-radius: 50%; background-color: white; padding: 5px; box-shadow: var(--shadow); margin-bottom: 20px; }
-        .chat-intro h1 { font-size: 28px; margin: 0 0 10px 0; color: var(--text-color); }
-        .chat-intro p { font-size: 16px; margin-bottom: 20px; }
+        .chat-window::-webkit-scrollbar-thumb, .menu-cards::-webkit-scrollbar-thumb { background: var(--border-color-strong); border-radius: 3px; }
+        
+        /* --- Chat Intro & Messages --- */
+        .chat-intro { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; color: var(--text-light); }
+        .chat-intro img { width: 80px; height: 80px; margin-bottom: 20px; }
+        .chat-intro h1 { font-size: 28px; font-weight: 700; margin: 0 0 10px 0; color: var(--text-dark); }
+        
         @keyframes message-in { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .message-wrapper { display: flex; margin-bottom: 20px; animation: message-in 0.4s ease-out; }
-        .message { padding: 12px 18px; border-radius: 20px; max-width: 80%; word-wrap: break-word; white-space: pre-wrap; line-height: 1.5; box-shadow: var(--shadow); }
-        .message p { margin: 0; } .message ul, .message ol { padding-left: 20px; } .message pre { background-color: #f4f4f4; padding: 10px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; } .message code { font-family: 'Courier New', Courier, monospace; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; margin-right: 12px; align-self: flex-end; flex-shrink: 0; }
-        .bot-message-wrapper { justify-content: flex-start; } .bot-message { background-color: var(--bot-message-bg); border-top-left-radius: 4px; }
-        .user-message-wrapper { justify-content: flex-end; } .user-message { background-color: var(--user-message-bg); border-top-right-radius: 4px; color: #2c3e50; } .user-message-wrapper .avatar { margin-left: 12px; margin-right: 0; }
-        .typing-indicator span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #aaa; margin: 0 2px; animation: typing-bounce 1.2s infinite ease-in-out; } .typing-indicator span:nth-child(1) { animation-delay: -0.32s; } .typing-indicator span:nth-child(2) { animation-delay: -0.16s; } @keyframes typing-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
-        .input-area-wrapper { padding: 16px 24px; flex-shrink: 0; }
-        .input-area { display: flex; align-items: center; padding: 8px; border-radius: 28px; background: var(--input-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); transition: box-shadow 0.3s ease; }
-        .input-area:focus-within { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
-        #user-input { flex-grow: 1; border: none; outline: none; background-color: transparent; font-size: 16px; color: var(--text-color); padding: 8px; resize: none; max-height: 150px; }
-        #user-input::placeholder { color: var(--light-text-color); }
-        .send-button { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); border: none; width: 40px; height: 40px; border-radius: 50%; margin-left: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s ease, box-shadow 0.3s ease; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
-        .send-button:hover { transform: scale(1.1); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); }
-        .send-button:active { transform: scale(1.05); }
+        .message-wrapper { display: flex; margin-bottom: 24px; animation: message-in 0.4s ease-out; gap: 12px; }
+        .message { padding: 12px 18px; border-radius: 20px; max-width: 80%; line-height: 1.6; box-shadow: var(--shadow-md); }
+        .message p:not(:last-child) { margin-bottom: 1em; }
+        .message ul, .message ol { padding-left: 20px; } 
+        .message pre { background-color: #f3f4f6; color: #111827; padding: 12px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; font-size: 14px; } 
+        .message code:not(pre > code) { background-color: #e5e7eb; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+
+        .avatar { width: 40px; height: 40px; border-radius: 50%; align-self: flex-end; flex-shrink: 0; }
+        
+        .bot-message-wrapper { justify-content: flex-start; } 
+        .bot-message { background-color: var(--bot-message-bg); border-top-left-radius: 6px; }
+        
+        .user-message-wrapper { justify-content: flex-end; } 
+        .user-message { background: var(--user-message-bg); border-top-right-radius: 6px; color: var(--text-on-primary); }
+        /* No flex-direction-reverse needed if we handle order in JS */
+
+        .typing-indicator span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #9ca3af; margin: 0 2px; animation: typing-bounce 1.2s infinite ease-in-out; } 
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; } 
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; } 
+        @keyframes typing-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+        
+        /* --- Input Area --- */
+        .input-area-wrapper { padding: 16px 24px; flex-shrink: 0; border-top: 1px solid var(--border-color-light); }
+        .input-area { 
+            display: flex; 
+            align-items: center; 
+            padding: 8px; 
+            border-radius: 16px; 
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color-strong); 
+            box-shadow: var(--shadow-sm); 
+            transition: box-shadow 0.2s ease, border-color 0.2s ease; 
+        }
+        .input-area:focus-within { 
+            box-shadow: 0 0 0 3px var(--secondary-color-alpha, rgba(79, 70, 229, 0.2));
+            border-color: var(--secondary-color);
+        }
+        #user-input { 
+            flex-grow: 1; 
+            border: none; 
+            outline: none; 
+            background-color: transparent; 
+            font-size: 16px; 
+            color: var(--text-dark); 
+            padding: 8px; 
+            resize: none; 
+            max-height: 150px; 
+        }
+        #user-input::placeholder { color: var(--text-light); }
+        
+        .send-button { 
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 12px; 
+            margin-left: 8px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            flex-shrink: 0; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease; 
+            box-shadow: var(--shadow-sm); 
+        }
+        .send-button:hover { 
+            transform: scale(1.05); 
+            box-shadow: var(--shadow-md); 
+        }
+        .send-button:active { transform: scale(1); }
         .send-button svg { color: white; width: 20px; height: 20px; }
-        #spinner { display: none; width: 24px; height: 24px; border: 3px solid rgba(0,0,0,0.2); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 16px 0 12px; }
+        
+        #spinner { display: none; width: 24px; height: 24px; border: 3px solid rgba(0,0,0,0.1); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: auto 12px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
+        /* --- Mobile / Responsive --- */
         .menu-toggle-button { display: none; background: transparent; border: none; cursor: pointer; padding: 0; margin-right: 16px; color: var(--primary-color); }
-        .close-sidebar-button { display: none; position: absolute; top: 10px; right: 15px; background: transparent; border: none; font-size: 28px; line-height: 1; cursor: pointer; color: var(--light-text-color); }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
+        .close-sidebar-button { display: none; position: absolute; top: 12px; right: 15px; background: transparent; border: none; font-size: 28px; line-height: 1; cursor: pointer; color: var(--text-light); z-index: 1001; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(25, 34, 49, 0.5); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
         .overlay.active { opacity: 1; pointer-events: auto; }
 
         @media (max-width: 1100px) {
             .top-nav { justify-content: flex-start; }
-            .top-nav .logo { flex-grow: 1; text-align: center; }
+            .top-nav .logo { flex-grow: 1; text-align: center; transform: translateX(-12px); }
             .menu-toggle-button { display: flex; align-items: center; justify-content: center; }
-            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000; transform: translateX(-100%); background-color: #f7faff; border-right: 1px solid var(--border-color); }
-            .sidebar.open { transform: translateX(0); }
+            .sidebar { position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000; transform: translateX(-100%); background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color-light); }
+            .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
             .close-sidebar-button { display: block; }
         }
     </style>
@@ -114,7 +264,7 @@
             </div>
             <div class="chat-window" id="chat-window">
                 <div class="chat-intro" id="chat-intro">
-                    <img src="https://api.iconify.design/ph:robot-bold.svg?color=%236a11cb" alt="AI Avatar">
+                    <img src="https://api.iconify.design/ph:robot-bold.svg?color=%236D28D9" alt="AI Avatar">
                     <h1>Vishesh Personal AI Agent</h1>
                     <p>Select an agent from the sidebar or ask me anything to get started.</p>
                 </div>
@@ -141,15 +291,15 @@
         const menuCardsContainer = document.getElementById('menu-cards-container');
 
         const agentItems = [
-            { title: "AI-Powered Freelance Marketplace", description: "Connects freelancers with AI agents to automate tasks like project proposals, contract creation, and communication.", icon: "ph:briefcase-duotone" },
-            { title: "AI Video Sales Letter Creator", description: "Generates compelling video sales letters from business input, optimizing sales strategies.", icon: "ph:video-camera-duotone" },
-            { title: "AI Customer Support Automation", description: "Implements AI chatbots to handle routine inquiries, freeing up human support for complex issues.", icon: "ph:chats-circle-duotone" },
-            { title: "AI-Generated Virtual Employees", description: "AI agents perform administrative tasks like scheduling, email management, or customer service.", icon: "ph:users-three-duotone" },
-            { title: "AI Meeting Summarizer Agent", description: "Automatically summarizes meeting content, capturing key points and action items.", icon: "ph:file-text-duotone" },
-            { title: "AI CRM Follow-Up Agent", description: "Automates follow-up emails and tasks based on CRM data, improving engagement.", icon: "ph:chart-line-up-duotone" },
-            { title: "AI Financial Forecasting Assistant", description: "Analyzes financial data and predicts future trends to inform business decisions.", icon: "ph:bank-duotone" },
-            { title: "AI Inbox Zero Agent", description: "Sorts and manages emails, filtering out irrelevant messages and prioritizing important ones.", icon: "ph:envelope-simple-open-duotone" },
-            { title: "AI Client Onboarding Bot", description: "Guides new clients through onboarding, automating tasks and providing personalized support.", icon: "ph:user-plus-duotone" }
+            { title: "AI Freelance Agent", description: "Generate a project proposal for a new client.", icon: "ph:briefcase-duotone", prompt: `Generate a project proposal for a client named "Innovate Corp" for a "new website redesign".` },
+            { title: "AI Video Script Agent", description: "Create a video sales script for a new product.", icon: "ph:video-camera-duotone", prompt: `Create a video script for a product named "Synth AI", targeting "busy entrepreneurs" with the pain point of "inefficient marketing".` },
+            { title: "AI Customer Support Agent", description: "Get an automated answer for a support query.", icon: "ph:chats-circle-duotone", prompt: `What is your policy on international shipping?` },
+            { title: "AI Virtual Employee", description: "Schedule a meeting with your team.", icon: "ph:users-three-duotone", prompt: `Schedule a meeting with ['Alice', 'Bob'] for 'Q3 Project Kick-off' tomorrow at 3 PM.` },
+            { title: "AI Meeting Summarizer", description: "Summarize a transcript and get action items.", icon: "ph:file-text-duotone", prompt: `Summarize this meeting transcript: "Okay team, the numbers for Q2 are positive. We hit our targets. However, our user engagement is slightly down. Sarah, can you look into that? Alex, please prepare the Q3 budget draft. The overall sentiment is good, but we need to stay focused."` },
+            { title: "AI CRM Follow-Up Agent", description: "Draft a personalized follow-up email.", icon: "ph:chart-line-up-duotone", prompt: `Draft a follow-up email for customer "Jane Doe". We last spoke 10 days ago about the "Enterprise Plan".` },
+            { title: "AI Financial Forecaster", description: "Generate a sales forecast chart for a product.", icon: "ph:bank-duotone", prompt: `Generate a sales forecast for the "Quantum Laptops" category.` },
+            { title: "AI Inbox Zero Agent", description: "Categorize an incoming email automatically.", icon: "ph:envelope-simple-open-duotone", prompt: `Categorize an email with the subject "Urgent: Invoice #12345 Due" from "accounts@billing.com".` },
+            { title: "AI Client Onboarding Agent", description: "Create an onboarding checklist for a new client.", icon: "ph:user-plus-duotone", prompt: `Generate an onboarding checklist for our new client "Global Tech Inc." for our "SaaS Integration" service.` }
         ];
 
         function populateMenuCards() {
@@ -157,12 +307,14 @@
                 const card = document.createElement('div');
                 card.classList.add('menu-card');
                 card.innerHTML = `
-                    <img src="https://api.iconify.design/${item.icon}.svg?color=%236a11cb" class="icon" alt="${item.title} icon">
-                    <div><h3>${item.title}</h3><p>${item.description}</p></div>
+                    <img src="https://api.iconify.design/${item.icon}.svg?color=%236D28D9" class="icon" alt="${item.title} icon">
+                    <div class="text-content">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                    </div>
                 `;
                 card.addEventListener('click', () => {
-                    const question = `Tell me more about the "${item.title}".`;
-                    userInput.value = question;
+                    userInput.value = item.prompt;
                     sendMessage();
                 });
                 menuCardsContainer.appendChild(card);
@@ -190,21 +342,17 @@
         overlay.addEventListener('click', toggleMenu);
 
         function addMenuCloseListenerToCards() {
-            const cards = document.querySelectorAll('.menu-card');
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    if (sidebar.classList.contains('open')) {
-                        toggleMenu();
-                    }
-                });
+            menuCardsContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.menu-card') && sidebar.classList.contains('open')) {
+                    toggleMenu();
+                }
             });
         }
         addMenuCloseListenerToCards();
 
         const clientId = Date.now();
-        // const localBackendUrl = '127.0.0.1:8000'; 
-        const backendUrl = 'ai-tools-servers.onrender.com';
-        const wsUrl = `wss://${backendUrl}/ws/${clientId}`;
+        const localBackendUrl = '127.0.0.1:8000'; 
+        const wsUrl = `ws://${localBackendUrl}/ws/${clientId}`;
         const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => { console.log('Connected to local FastAPI WebSocket server'); };
@@ -235,119 +383,118 @@
         
         let thinkingMessageElement = null;
 
-   // In index.html, inside the <script> tag
+        function displayMessage(message, sender) {
+            if (thinkingMessageElement) {
+                thinkingMessageElement.remove();
+                thinkingMessageElement = null;
+            }
 
-function displayMessage(message, sender) {
-    if (thinkingMessageElement) {
-        thinkingMessageElement.remove();
-        thinkingMessageElement = null;
-    }
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('message-wrapper', sender === 'user' ? 'user-message-wrapper' : 'bot-message-wrapper');
 
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('message-wrapper', sender === 'user' ? 'user-message-wrapper' : 'bot-message-wrapper');
+            const avatar = document.createElement('img');
+            avatar.classList.add('avatar');
+            avatar.src = sender === 'user' 
+                ? 'https://api.iconify.design/ph:user-circle-bold.svg?color=%236B7280'
+                : 'https://api.iconify.design/ph:robot-duotone.svg?color=%236D28D9';
 
-    const avatar = document.createElement('img');
-    avatar.classList.add('avatar');
-    avatar.src = sender === 'user' 
-        ? 'https://api.iconify.design/ph:user-bold.svg?color=%234f4f4f'
-        : 'https://api.iconify.design/ph:robot-duotone.svg?color=%236a11cb';
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
 
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-
-    let isChart = false;
-    if (sender === 'bot') {
-        try {
-            const jsonStringMatch = message.match(/{[\s\S]*}/);
-            if (jsonStringMatch) {
-                const correctedJsonString = jsonStringMatch[0].replace(/'/g, '"').replace(/None/g, 'null');
-                const data = JSON.parse(correctedJsonString);
-                
-                // NEW CHECK for historical_data and forecast_data
-                if (data && data.labels && data.historical_data && data.forecast_data) {
-                    isChart = true;
-
-                    const chartTitle = document.createElement('h4');
-                    chartTitle.textContent = `Sales Forecast for: ${data.product_category}`;
-                    chartTitle.style.margin = '0 0 10px 0';
-                    const canvas = document.createElement('canvas');
-                    messageElement.appendChild(chartTitle);
-                    messageElement.appendChild(canvas);
-
-                    // Render the NEW chart with two datasets
-                    new Chart(canvas, {
-                        type: 'line',
-                        data: {
-                            labels: data.labels,
-                            datasets: [
-                                {
-                                    label: 'Historical Sales',
-                                    data: data.historical_data,
-                                    borderColor: 'rgb(54, 162, 235)',
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    fill: false,
-                                    tension: 0.1
-                                },
-                                {
-                                    label: 'Forecasted Sales',
-                                    data: data.forecast_data,
-                                    borderColor: 'rgb(255, 99, 132)',
-                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                    borderDash: [5, 5], // Dashed line for forecast
-                                    fill: false,
-                                    tension: 0.1
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
-                                tooltip: {
-                                    mode: 'index',
-                                    intersect: false
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: false, // Don't force y-axis to start at 0
-                                    ticks: {
-                                        callback: function(value, index, values) {
-                                            return '$' + new Intl.NumberFormat().format(value);
-                                        }
-                                    }
-                                }
+            let isChart = false;
+            if (sender === 'bot') {
+                try {
+                    const jsonStringMatch = message.match(/{[\s\S]*}/);
+                    if (jsonStringMatch) {
+                        const correctedJsonString = jsonStringMatch[0].replace(/'/g, '"').replace(/None/g, 'null');
+                        const data = JSON.parse(correctedJsonString);
+                        
+                        if (data && data.labels && data.historical_data && data.forecast_data) {
+                            isChart = true;
+                            
+                            const introText = message.substring(0, jsonStringMatch.index).trim();
+                            if(introText) {
+                                const introElement = document.createElement('div');
+                                introElement.innerHTML = marked.parse(introText, { breaks: true, gfm: true });
+                                messageElement.appendChild(introElement);
                             }
+
+                            const chartTitle = document.createElement('h4');
+                            chartTitle.textContent = `Sales Forecast: ${data.product_category}`;
+                            chartTitle.style.margin = '10px 0 15px';
+                            chartTitle.style.fontWeight = '600';
+                            const canvasContainer = document.createElement('div');
+                            canvasContainer.style.position = 'relative';
+                            canvasContainer.style.height = '300px';
+                            canvasContainer.style.width = '100%';
+                            const canvas = document.createElement('canvas');
+                            canvasContainer.appendChild(canvas)
+                            messageElement.appendChild(chartTitle);
+                            messageElement.appendChild(canvasContainer);
+
+                            new Chart(canvas, {
+                                type: 'line',
+                                data: {
+                                    labels: data.labels,
+                                    datasets: [
+                                        {
+                                            label: 'Historical Sales',
+                                            data: data.historical_data,
+                                            borderColor: 'rgb(54, 162, 235)',
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            fill: false,
+                                            tension: 0.2
+                                        },
+                                        {
+                                            label: 'Forecasted Sales',
+                                            data: data.forecast_data,
+                                            borderColor: 'rgb(255, 99, 132)',
+                                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                            borderDash: [5, 5],
+                                            fill: false,
+                                            tension: 0.2
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: { legend: { position: 'top' }, tooltip: { mode: 'index', intersect: false } },
+                                    scales: { y: { beginAtZero: false, ticks: { callback: (value) => '$' + new Intl.NumberFormat().format(value) } } }
+                                }
+                            });
                         }
-                    });
+                    }
+                } catch (e) {
+                    console.log("Could not parse message as chart data.", e);
+                    isChart = false;
                 }
             }
-        } catch (e) {
-            console.log("Could not parse message as chart data.", e);
+
+            if (!isChart) {
+                messageElement.innerHTML = marked.parse(message, { breaks: true, gfm: true });
+            }
+
+            // --- THIS IS THE FIX ---
+            // The order of appending matters for flexbox alignment.
+            if (sender === 'user') {
+                wrapper.appendChild(messageElement);
+                wrapper.appendChild(avatar);
+            } else {
+                wrapper.appendChild(avatar);
+                wrapper.appendChild(messageElement);
+            }
+            // --- END OF FIX ---
+            
+            chatWindow.appendChild(wrapper);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
         }
-    }
 
-    if (!isChart) {
-        messageElement.innerHTML = marked.parse(message, { breaks: true, gfm: true });
-    }
-
-    if (sender === 'user') {
-        wrapper.appendChild(messageElement);
-        wrapper.appendChild(avatar);
-    } else {
-        wrapper.appendChild(avatar);
-        wrapper.appendChild(messageElement);
-    }
-    chatWindow.appendChild(wrapper);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-}
         function showLoading() {
             if (chatIntro) { chatIntro.style.display = 'none'; }
             thinkingMessageElement = document.createElement('div');
             thinkingMessageElement.classList.add('message-wrapper', 'bot-message-wrapper');
-            thinkingMessageElement.innerHTML = `<img class="avatar" src="https://api.iconify.design/ph:robot-duotone.svg?color=%236a11cb" alt="AI Avatar"><div class="message bot-message"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+            thinkingMessageElement.innerHTML = `<img class="avatar" src="https://api.iconify.design/ph:robot-duotone.svg?color=%236D28D9" alt="AI Avatar"><div class="message bot-message"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
             chatWindow.appendChild(thinkingMessageElement);
             chatWindow.scrollTop = chatWindow.scrollHeight;
             sendButton.style.display = 'none';
